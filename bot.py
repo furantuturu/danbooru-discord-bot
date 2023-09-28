@@ -23,8 +23,14 @@ i = 0 # paging purpose
 async def on_ready():
     print(f"{client.user} is now online, ID:{client.user.id}")
 
+    try:
+        synced = await client.tree.sync()
+        print(f"Synced {len(synced)} command(s)")
+    except Exception:
+        print(Exception)
+
 @client.command()
-async def tags(ctx, *, tag_args):
+async def fetchbooru(ctx, *, tag_args: str):
     try:
         tags = tag_args + " rating:general"
         url = api_posts + urllib.parse.urlencode({"tags": tags})
@@ -66,7 +72,12 @@ async def tags(ctx, *, tag_args):
         )
         
         await ctx.send(embed=err_embed)
-        
-    
+
+@client.tree.command(name="fetchbooru", description="Fetch an art/image with the 2 tags of your choice")
+@app_commands.describe(tag1="Enter a danbooru valid tag")        
+@app_commands.describe(tag2="Enter a danbooru valid tag")        
+async def fetchbooru(interaction: discord.Interaction, tag1: str, tag2: str):
+    await interaction.response.send_message(f"Your tags: {tag1}, {tag2} ")
+
 def run_discord():
     client.run(DISCORD_TOKEN)
