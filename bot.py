@@ -72,6 +72,14 @@ async def fetchbooru(ctx, *, tag_args: str):
         )
         
         await ctx.send(embed=err_embed)
+    
+    except IndexError:
+        err_embed = discord.Embed(
+            colour=discord.Color.from_rgb(r=175, g=138, b=101),
+            description="⚠️ Either it contains explicit content or it doesn't exist."
+        )
+        
+        await ctx.send(embed=err_embed)
 
 @client.tree.command(name="fetchbooru", description="Fetch an art/image with the 2 tags of your choice")
 @app_commands.describe(tag1="Enter a danbooru valid tag")        
